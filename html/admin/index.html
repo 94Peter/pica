@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>業績動態後台</title>
+
+    <!-- favicon -->
+    <link rel="apple-touch-icon" sizes="144x144" href="assets/images/favicon/Icon-144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="assets/images/favicon/Icon-152.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="assets/images/favicon/Icon-114.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="assets/images/favicon/Icon-72.png">
+    <link rel="apple-touch-icon" href="assets/images/favicon/Icon-57.png">
+    <!--[if IE]><link rel="shortcut icon" href="assets/images/Icon-32.ico"><![endif]-->
+    <link rel="icon" href="assets/images/favicon/Icon-64.png">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="assets/images/favicon/Icon-144.png">
+    <link rel="icon" href="assets/images/favicon/Icon-228.png" sizes="228x228">
+    
+    <!-- build:css -->
+    <link rel="stylesheet" href="assets/css/layout.css">
+    <!-- endbuild -->
+
+    <script src="assets/js/vendors/vue.js"></script>
+    <script src="assets/js/vendors/vue-router.js"></script>
+    <script src="assets/js/vendors/Sortable.min.js"></script>
+    <script src="assets/js/vendors/vuedraggable.umd.min.js"></script>
+    <script src="assets/js/vendors/axios.min.js"></script>
+    <script src="assets/js/vendors/lodash.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-auth.js"></script>
+</head>
+<body>
+    <!--_____________________________________________ loading -->
+    <div id="loading" class="loading active">
+        <div class="container">
+            <div class="d-flex justify-content-center align-items-center">
+                <div class="loading_txt" id="loading_txt">
+                    <p><span id="loading_num">0</span> / 100</p>
+                    <div class="loading_frame">
+                        <div id="loading_bar" class="loading_bar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--_____________________________________________ screen -->
+    <div id="app" class="screen">
+        <div class="pages">
+            <button class="btn btn-back btn-icon" v-on:click="goBack()" v-if="['manage-store', 'manage-people', 'manage-items'].indexOf($route.name) > -1"></button>
+            <!-- <transition name="fade" mode="out-in" :duration="{ enter: 300, leave: 200 }"> -->
+                <router-view 
+                    :userdata="userData"
+                    :datastore="dataStore"
+                    :datapeople="dataPeople"
+                    :datareport="dataReport"
+                    :currentstore="currentStore" 
+
+                    :enabled="enabled" 
+                    :dragging="dragging"
+
+                    @log-in="login"
+                    @log-out="logout"
+                    @choose-store="chooseStore"
+                    @choose-person="choosePerson"
+                    
+
+                    @choose-item="chooseReport"
+                    @send-report="sendReport"
+
+                    @open-lightbox="openLightbox"
+                    @close-lightbox="closeLightbox"
+                        >
+                </router-view>
+            <!-- </transition> -->
+            
+        </div>
+
+        <!--______________________________________________________________________ lightbox -->
+        <transition name="fade">
+        <div v-if="isOpenLightbox" class="lightbox">
+            <div class="d-flex justify-content-center row align-items-center">
+                <div class="lightbox-frame">
+                    <component
+                        v-bind:is="currentLightbox" @open-lightbox="openLightbox"  @close-lightbox="closeLightbox"
+
+                        :datastore="dataStore"
+                        :datareport="dataReport" 
+                        :currentitem="currentItem"
+                        :currentstore="currentStore"
+                        :currentpermission="currentPermission"
+
+                        @forgot-pwd="forgotPwd"
+                        @add-store="addStore"
+                        @add-people="addPeople"
+                        @add-report="addReport"
+                        @modify-Report="modifyReport"
+                        @delete-Report="deleteReport"
+                        @transfer="transfer"
+                        @leave="leave"
+                        @change-permission="changePermission"
+                    ></component>
+
+                    <button id="lightbox-close" class="btn btn-close btn-icon" @click="closeLightbox">
+                        <span></span><span></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        </transition>
+        
+
+        <!--______________________________________________________________________ load -->
+        <div id="load" class="load">
+            <div>
+                <?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.0" width="64px" height="64px" viewBox="0 0 128 128" xml:space="preserve"><rect x="0" y="0" width="100%" height="100%" fill="transparent" /><g><circle cx="16" cy="64" r="16" fill="#1594a5" fill-opacity="1"/><circle cx="16" cy="64" r="14.344" fill="#1594a5" fill-opacity="1" transform="rotate(45 64 64)"/><circle cx="16" cy="64" r="12.531" fill="#1594a5" fill-opacity="1" transform="rotate(90 64 64)"/><circle cx="16" cy="64" r="10.75" fill="#1594a5" fill-opacity="1" transform="rotate(135 64 64)"/><circle cx="16" cy="64" r="10.063" fill="#1594a5" fill-opacity="1" transform="rotate(180 64 64)"/><circle cx="16" cy="64" r="8.063" fill="#1594a5" fill-opacity="1" transform="rotate(225 64 64)"/><circle cx="16" cy="64" r="6.438" fill="#1594a5" fill-opacity="1" transform="rotate(270 64 64)"/><circle cx="16" cy="64" r="5.375" fill="#1594a5" fill-opacity="1" transform="rotate(315 64 64)"/><animateTransform attributeName="transform" type="rotate" values="0 64 64;315 64 64;270 64 64;225 64 64;180 64 64;135 64 64;90 64 64;45 64 64" calcMode="discrete" dur="800ms" repeatCount="indefinite"></animateTransform></g></svg>
+            </div>
+        </div>
+
+
+
+        <!--______________________________________________________________________ hint -->
+        <div id="hint" class="hint">
+            <p id="success" class="success">送出成功！</p>
+            <p id="failed" class="failed">送出失敗！</p>
+        </div>
+    </div>
+	
+
+
+    <!-- build:js_body -->
+    <script src="assets/js/vendors/jquery-3.3.1.min.js"></script>
+    <script src="assets/js/vendors/queryloader2.min.js"></script>
+    <script src="assets/js/vendors/TweenMax.min.js"></script>
+    <script src="assets/js/global.js"></script>
+    <script src="assets/js/admin_components.js"></script>
+    <script src="assets/js/admin.js"></script>
+    <!-- endbuild -->
+    
+</body>
+</html>

@@ -1,0 +1,580 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: 業績動態資訊平台
+
+servers:
+# Added by API Auto Mocking Plugin
+  - url: https://pica957.appspot.com
+    description: 測試站
+
+tags:
+  - name: auth
+    description: 權限相關
+  - name: admin
+    description: 後台管理相關API
+  - name: report
+    description: 回報項目相關API
+  - name: trend
+    description: 趨勢相關API
+  
+
+    
+paths:
+  /v1/token:
+    get:
+      tags: [auth]
+      summary: 交換token (firebase token to pica token)
+      operationId: get-token
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  state:
+                    type: string
+                  permission:
+                    type: string
+        '401':
+          description: 無效的firebase token
+  /v1/setting/pwd:
+    put:
+      tags: [auth]
+      summary: 更新密碼
+      operationId: update-pwd
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                new:
+                  type: string
+                confirm:
+                  type: string
+      responses:
+        '200':
+          description: ok
+        '400':
+          description: invalid input
+        '401':
+          description: unauthrize
+        '500':
+          description: internal server error          
+  /v1/setting/init:
+    put:
+      tags: [auth]
+      summary: 初次登入更新
+      operationId: update-init
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                pwd:
+                  type: object
+                  properties:
+                    orignal:
+                      type: string
+                    new:
+                      type: string
+                    confirm:
+                      type: string
+                stock:
+                  type: number
+                performance:
+                  type: number
+      responses:
+        '200':
+          description: ok
+        '400':
+          description: invalid input
+        '401':
+          description: unauthrize
+        '500':
+          description: internal server error
+  /v1/setting/stock:
+    put:
+      tags: [auth]
+      summary: 更新個人庫存值
+      operationId: update-stock
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                value:
+                  type: number
+                  description: 數值
+      responses:
+        '200':
+          description: ok
+        '400':
+          description: invalid input
+  /v1/category:
+    post:
+      tags: [admin]
+      summary: 建立分類 (admin, office權限才能用)
+      operationId: create-category
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 類別名稱
+      responses:
+        '200':
+          description: "OK"
+        '400':
+          description: "bad request"
+        '500':
+          description: "internal server error"
+    get:
+      tags: [admin]
+      summary: 取得分類清單
+      operationId: get-category
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '204':
+          description: "無資料"
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+  /v1/user:
+    post:
+      tags: [admin]
+      summary: 建立人員 (admin, office權限才能用)
+      operationId: create-user
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 顯示名稱
+                phone:
+                  type: string
+                  description: 電話名稱
+                category:
+                  type: string
+                  description: 分類
+                permission:
+                  type: string
+                  description: 權限
+                email:
+                  type: string
+      responses:
+        '200':
+          description: "OK"
+        '400':
+          description: "bad request"
+        '500':
+          description: "internal server error"
+    get:
+      tags: [admin]
+      summary: 取得人員清單 (admin, office權限才能用)
+      operationId: get-user-list
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: query
+          name: c
+          required: false
+          schema:
+            type: string
+          description: 類別
+      responses:
+        '204':
+          description: "無資料"
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    phone:
+                      type: string
+                    permission:
+                      type: string
+  /v1/user/permission:
+    put:
+      tags: [admin]
+      summary: 更新使用者權限 (office, admin權限才能用)
+      operationId: update-user-permission
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone:
+                  type: string
+                  description: 電話名稱
+                permission:
+                  type: string
+                  description: 權限
+      responses:
+        '200':
+          description: ok
+        '400':
+          description: bad request
+        '500':
+          description: internal server error
+  /v1/user/category:
+    put:
+      tags: [admin]
+      summary: 更新使用者權限 (office, admin權限才能用)
+      operationId: update-user-category
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phone:
+                  type: string
+                  description: 電話名稱
+                category:
+                  type: string
+                  description: 分店
+      responses:
+        '200':
+          description: ok
+        '400':
+          description: bad request
+        '500':
+          description: internal server error
+  /v1/user/{PHONE}:
+    delete:
+      tags: [admin]
+      summary: 離職 (office, admin權限才能用)
+      operationId: delete-user
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: path
+          name: PHONE
+          required: true
+          schema:
+            type: string
+          description: 電話
+      responses:
+        '200':
+          description: ok
+        '404':
+          description: user not found
+        '500':
+          description: internal server error
+
+  /v1/reportItem:
+    post:
+      tags: [report]
+      summary: 建立報表項目 (admin, office權限才能用)
+      operationId: create-report-item
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportItemList'
+      responses:
+        '200':
+          description: ok
+        '400':
+          description: bad request
+    get:
+      tags: [report]
+      summary: 取得報表項目
+      operationId: get-report-item
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '204':
+          description: "無資料"
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportItemList'
+  /v1/report:
+    post:
+      tags: [report]
+      summary: 業務回報
+      operationId: create-report
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Report'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: invalid input
+    get:
+      tags: [report]
+      summary: 取得回報內容
+      operationId: get-report
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: query
+          name: d
+          required: false
+          schema:
+            type: string
+          description: 時間 (2019-04-29)
+      responses:
+        '204':
+          description: "無資料"
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportAnswerList'
+        '400':
+          description: "時間格式錯誤"
+        '500':
+          description: internal server error
+  /v1/log/report:
+    get:
+      tags: [report]
+      summary: 回報日誌
+      operationId: get-report-log
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    account:
+                      type: string
+                    name:
+                      type: string
+                    phone:
+                      type: string
+                    permission:
+                      type: string
+        '204':
+          description: no content
+  /v1/trend/daily:
+    get:
+      tags: [trend]
+      summary: 取得每日動態
+      operationId: get-daily-trend
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: query
+          name: date
+          required: false
+          schema:
+            type: string
+          description: 日期(2019-05-20)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DailyTrend'
+        '204':
+          description: 無資料
+  /v1/trend/category:
+    get:
+      tags: [trend]
+      summary: 取得分類動態
+      operationId: get-category-trend
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: query
+          name: c
+          required: false
+          schema:
+            type: string
+          description: 類別
+        - in: query
+          name: date
+          required: false
+          schema:
+            type: string
+          description: 日期(2019-05-20)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryTrend'
+        '204':
+          description: 無資料
+  
+
+components:
+  schemas:
+    ReportAnswerList:
+      type: array
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+          unit:
+            type: string
+          hasText:
+            type: string
+          isShow:
+            type: boolean
+          value:
+            type: number
+          msg:
+            type: string
+    Report:
+      type: object
+      properties:
+        date:
+          type: string
+          example: "2019-04-22"
+        answers:      
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              unit:
+                type: string
+              hasText:
+                type: boolean
+              isShow:
+                type: boolean
+              value:
+                type: number
+              msg:
+                type: string
+    CategoryTrend:
+      type: object
+      properties:
+        columns:
+          type: array
+          items:
+            type: string
+        data:
+          type: array
+          items:
+            type: array
+            items:
+              type: string
+        total:
+          type: array
+          items:
+            type: string
+      example:
+        columns: ["店名", "委託", "附表", "帶看", "收斡", "成交", "庫存"]
+        data:
+          - - 東湖店
+            - 2件
+            - 1件
+            - 3件
+            - 0件
+            - 1件
+            - 1件
+          - - 內湖店
+            - 2件
+            - 1件
+            - 3件
+            - 1件
+            - 1件
+            - 1件
+        total:
+          - Total
+          - 4件
+          - 2件
+          - 6件
+          - 1件
+          - 2件
+          - 2件
+    DailyTrend:
+      type: array
+      items:
+        type: object
+        properties:
+          category:
+            type: string
+          name:
+            type: string
+          type:
+            type: string
+          value:
+            type: number
+          msg:
+            type: string
+    ReportItemList:
+      type: array
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+          unit:
+            type: string
+          hasText:
+            type: string
+          isShow:
+            type: boolean
+  securitySchemes:
+    ApiKeyAuth:        # arbitrary name for the security scheme
+      type: apiKey
+      in: header       # can be "header", "query" or "cookie"
+      name: Auth-Token  # name of the header, query parameter or cookie
