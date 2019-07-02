@@ -94,14 +94,13 @@ func (rs *reportState) refresh(loc *time.Location) {
 	rs.RS = make(map[string]time.Time)
 }
 
-func (rs *reportState) addState(account string, reportTime time.Time) bool {
+func (rs *reportState) addState(account string, reportTime time.Time, loc *time.Location) bool {
+	if rs.isRefreshState(loc) {
+		rs.refresh(loc)
+	}
 	d := reportTime.Sub(rs.ReportDate)
 	if d.Nanoseconds() < 0 {
 		return false
-	}
-	if d.Nanoseconds() > 0 {
-		rs.ReportDate = reportTime
-		rs.RS = make(map[string]time.Time)
 	}
 	if rs.RS == nil {
 		rs.RS = make(map[string]time.Time)
@@ -153,14 +152,13 @@ func (sm *salesModel) Report(answer []*Answer) error {
 		}
 		points[i] = answer[i]
 	}
-	fmt.Println("report")
 	err := sm.tsdb.Save(points...)
 	if err != nil {
 		return err
 	}
 	acc := answer[0].U.Account
 	reportDate := answer[0].Date
-	if isAdd := sm.rs.addState(acc, reportDate); isAdd {
+	if isAdd := sm.rs.addState(acc, reportDate, sm.imr.GetLocation()); isAdd {
 		return sm.rs.Save(sm.imr.GetDB())
 	}
 	return nil

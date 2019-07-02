@@ -5,3 +5,4 @@ bin/*
 conf/*
 *.json
 app.yaml
+admin.js

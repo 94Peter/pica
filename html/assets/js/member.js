@@ -645,6 +645,7 @@ let vm = new Vue({
                                                     sessionStorage.setItem('permission', json.permission);
                                                     vm.hintGreen('登入成功');
                                                     switch(json.state){
+                                                        case 'reset':
                                                         case 'normal':
                                                             router.push({ name: "today"});
                                                             break;
