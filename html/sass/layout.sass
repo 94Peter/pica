@@ -1,0 +1,802 @@
+@charset "UTF-8"
+
+@import bootstrap/bootstrap
+@import _reset
+@import parameters
+
+/* ____________________________________________ common */
+html
+	height: 100%
+	-webkit-text-size-adjust: 100%
+body
+	color: $color-blue
+	background: #333
+	font: 300 15px/1.8em $font-r
+	height: 100%
+::selection
+	background: $color-select
+	color: $color-white
+::-moz-selection
+	background: $color-select
+	color: $color-white
+.container
+	height: 100%
+	padding: 0
+.screen
+	height: 100%
+	position: relative
+	background: $color-bg
+	position: fixed
+	left: 0
+	top: 0
+	width: 100%
+	&.fixed
+		overflow: hidden
+.pages
+	width: 100%
+	padding: 81px 0 0 0
+	height: 100%
+	text-align: center
+	// &::before
+	// 	content: ""
+	// 	display: block
+	// 	position: absolute
+	// 	left: 0
+	// 	top: 0
+	// 	width: 100%
+	// 	height: 80px
+	// 	background: $color-title
+.page
+	width: 100%
+	height: 100%
+	max-width: 640px
+	margin: 0 auto
+	.page-scroll
+		padding: 0 20px
+		overflow: auto
+		-webkit-overflow-scrolling: touch
+		width: 100%
+		height: 100%
+		.row
+			width: 100%
+		>div
+			// min-height: 100%
+			width: 100%
+			padding: 40px 0 20px 0
+			>form
+				max-width: 360px
+				width: 100%
+a, a:hover, a:active, a:focus, button, button:hover, button:active, button:focus, .btn, .btn:hover, .btn:active, .btn:focus
+	text-decoration: none
+	outline: none
+	+transition(all .3s ease)
+	+box-shadow(none)
+img, svg
+	width: 100%
+	max-width: 100%
+	height: auto
+	display: block
+.btn-primary 
+	background-color: $color-button
+	border-color: $color-button
+	&:hover, &:focus, &:active
+		background-color: $color-button-hover
+		border-color: $color-button-hover
+.form-control:focus 
+	background-color: $color-gray-light
+	border-color: $color-gray
+	box-shadow: none
+.table
+	margin: 0
+	font-size: .95em
+	td
+		line-height: 1.4em
+tr:nth-of-type(1) th, tr:nth-of-type(1) td
+	border: 0
+.table-striped tbody tr
+	&:nth-of-type(odd)
+		background-color: #ffffff
+		td
+			background-color: #ffffff
+	&:nth-of-type(even)
+		background-color: $color-gray-light
+		td
+			background-color: $color-gray-light
+	&:nth-of-type(1)
+		background: $color-blue
+		color: #ffffff
+	th, td
+		padding-left: 10px
+		padding-right: 10px
+		border: 0
+		border-left: 1px solid #fff
+		&:nth-of-type(1)
+			border-left: 0
+.table-responsive-sm
+	th:nth-of-type(1), td:nth-of-type(1)
+		padding: 0
+		// position: absolute
+		// top: auto
+		// left: 0
+		+box-shadow(2px 0 4px rgba(0,0,0,.1))
+	th
+		background: $color-blue
+		color: #ffffff
+	.table
+		white-space: nowrap
+	tbody tr.table-primary td
+		background: $color-blue-light
+		color: #ffffff
+/* ____________________________________________ loading */
+.loading
+	position: fixed
+	left: 0
+	top: 0
+	z-index: 10000
+	width: 100%
+	height: 100%
+	background: $color-bg
+	text-align: center
+	// display: none
+	.container>div
+		height: 100%
+		padding: 0 40px
+	.loading_txt
+		margin-top: -2px
+		width: 100%
+	.loading_frame
+		width: 100%
+		position: relative
+		border: 1px solid $color-title
+		border-radius: 20px
+	.loading_bar
+		height: 100%
+		width: 100%
+		+transform(scaleX(0))
+		// +transform-origin(0,0)
+		background: $color-title
+		height: 10px
+	p
+		font-size: 1.2em
+		line-height: 1.4em
+		margin: -1em 0 .2em 0
+		// letter-spacing: .2em
+		color: $color-title
+		font-family: Noto Sans, Arial, Helvetica, sans-serif
+
+.load
+	position: fixed
+	left: 0
+	top: 0
+	width: 100%
+	height: 100%
+	background: rgba(236, 236, 236, 0.5)
+	z-index: 10000
+	display: none
+	div
+		width: 60px
+		height: 60px
+		position: absolute
+		left: 50%
+		top: 50%
+		+transform(translate(-50%,-50%))
+		svg
+			width: 100%
+// @media #{$screen-md}
+// 	.loading
+// 		p
+// 			font-size: .9em
+// 			white-space: nowrap
+// 			margin-bottom: 1.3em
+// 			letter-spacing: 0.05em
+
+
+/* ____________________________________________ lightbox */
+.lightbox
+	background: rgba(255,255,255,.7)
+	position: fixed
+	left: 0
+	top: 0
+	z-index: 9999
+	width: 100%
+	height: 100%
+	// display: none
+	// +opacity(0)
+	&.active
+		.lightbox-frame
+			+transform(translateY(0))
+	>div
+		height: 100%
+		padding: 15px 30px
+.lightbox-frame
+	width: 100%
+	max-height: 100%
+	max-width: 360px
+	margin: 0 auto
+	position: relative
+	text-align: center
+	background: transparent
+	border-radius: 4px
+	background: #ffffff
+	overflow: auto
+	-webkit-overflow-scrolling: touch
+	padding: 40px 0 20px 0
+	+box-shadow(2px 2px 10px rgba(0,0,0,.2))
+	+transition(all .3s ease)
+	// +transform(translateY(30px))
+.lightbox-content
+	position: relative
+	text-align: center
+	padding: 0 20px
+	max-height: 100%
+	&#content-setting-stock
+		display: block
+	&:last-child
+		margin-bottom: 0
+.btn-close
+	right: 0
+	z-index: 1000
+	+transform-origin(50%,50%)
+	span
+		display: block
+		background: $color-blue
+		width: 40%
+		height: 2px
+		border-radius: 0
+		margin: 0
+		position: absolute
+		top: 50%
+		left: 50%
+		+transition(all .3s ease)
+		&:nth-of-type(1)
+			+transform(translate(-50%,-50%) rotate(45deg))
+		&:nth-of-type(2)
+			+transform(translate(-50%,-50%) rotate(-45deg))
+	&.active
+		+transform(rotate(-90deg))
+		&:hover, &:active, &:focus
+			+transform(rotate(0deg))
+
+/* ____________________________________________ hint */
+.hint
+	position: fixed
+	left: 50%
+	top: 50%
+	+transform(translate(-50%,-50%))
+	width: 100%
+	z-index: 10000
+	max-width: 300px
+	p
+		color: white
+		padding: 10px
+		border-radius: 4px
+		text-align: center
+		display: none
+		opacity: 0
+		max-width: 80%
+		margin: 15px auto
+		&.success
+			background: rgba(44, 171, 171, 0.85)
+		&.failed
+			background: rgba(220, 26, 26, 0.85)
+
+
+
+	
+// /* ____________________________________________ keyframes */
+// +keyframes(moveDown)
+// 	0%
+// 		+transform(translate3d(0,0,0))
+// 	100%
+// 		+transform(translate3d(0,60px,0))
+
+
+
+
+
+/* ____________________________________________ form */
+form
+	.form-text
+		font-size: .7em
+		line-height: 1.4em
+		text-align: left
+		color: $color-title
+h1
+	letter-spacing: .06em
+	line-height: 40px
+	background: $color-title
+	padding: 20px
+	white-space: nowrap
+	font-size: 1.6em
+	font-weight: 700
+	position: absolute
+	left: 0
+	top: 0
+	z-index: 99
+	width: 100%
+	border-bottom: 1px solid #fff
+	color: #fff
+	text-shadow: 1px 1px 6px rgba(0,0,0,.2)
+	&+.btn
+		z-index: 100
+h2
+	font-size: 1.3em
+	letter-spacing: .03em
+	color: $color-title
+	margin: 10px 0 20px 0
+	font-weight: 700
+h3
+	font-size: 1.4em
+	letter-spacing: .1em
+	color: #fff
+	background: $color-blue
+	line-height: 50px
+	border-radius: 4px 4px 0 0
+h4
+	font-size: 1.1em
+	letter-spacing: .1em
+	color: #fff
+	background: $color-blue-light
+	line-height: 40px
+	border-radius: 4px 4px 0 0
+.content
+	width: 100%
+.currTxt
+	margin: 20px 0
+.checkBlock
+	padding-top: 20px
+input.form-control
+	padding: 0 10px
+	line-height: 40px
+	font-size: 1em
+.col-form-label
+	font-size: 1em
+	line-height: 30px
+	letter-spacing: .05em
+	white-space: nowrap
+	text-align: left
+	color: $color-blue
+	padding-right: 0
+	&.lightbox-title
+		text-align: center
+		letter-spacing: .1em
+.btn
+	display: block
+	width: 100%
+	margin-bottom: 15px
+	padding: 0 20px
+	line-height: 40px
+	font-size: 1.1rem
+	letter-spacing: .1em
+	cursor: pointer
+	&.btn-icon
+		position: absolute
+		top: 0
+		background-color: transparent
+		background-position: center center
+		background-repeat: no-repeat
+		background-size: contain
+		width: 60px
+		height: 60px
+		color: #fff
+		font-size: .9em
+		padding: 0
+		z-index: 100
+	&.btn-back
+		left: 0
+		z-index: 120
+		background-image: url(../images/back.svg)!important
+		background-size: 24px auto
+	&.btn-add
+		right: 0
+		background-image: url(../images/add.svg)!important
+		background-size: 20px auto
+	&.btn-send
+		right: 0
+		background-image: url(../images/send.svg)!important
+		background-size: 24px auto
+	&.btn-icon2
+		background: $color-blue2
+		color: #fff
+		width: auto
+		margin: 10px auto 0 auto
+		font-size: 1em
+	&.btn-action
+		max-width: 200px
+		margin: 15px auto
+	&.btn-menu
+		right: 0
+	&.btn-option
+		border: 2px solid #d7dfe0
+		background: #ffffff
+		border-radius: 4px
+		color: $color-title
+		line-height: 50px
+		font-size: 1.3em
+		padding:  0 40px
+	&.btn-link
+		color: $color-button
+		display: inline-block
+		letter-spacing: .05em
+		font-size: 1em
+		width: auto
+		padding: 0 24px 0 0
+		&:hover
+			color: $color-blue-light
+	&.btn-forgot
+		background: url(../images/forgot.svg) right center/18px auto no-repeat!important
+	&.btn-first
+		background: url(../images/first.svg) right center/18px auto no-repeat!important
+	&.btn-logout
+		background: url(../images/logout.svg) 90% 45%/16px auto no-repeat!important
+	&.btn-menu 
+		background: url(../images/menu.svg) center center/24px auto no-repeat!important
+		z-index: 120
+	&.btn-edit
+		margin: 0
+		background: url(../images/edit.svg) center center/16px auto no-repeat!important
+	&.btn-detail
+		margin: 0
+		background: url(../images/detail.svg) center center/16px auto no-repeat!important
+.form-check
+	padding: 0 5px
+	margin: 0
+	label
+		display: block
+		width: 100%
+		line-height: 40px
+		color: $color-blue-light
+		background: $color-gray-light
+		+transition(all .3s ease)
+		cursor: pointer
+		padding: 0
+		border-radius: 4px
+	.form-check-input
+		+opacity(0)
+		width: 100%
+		height: 100%
+		position: absolute
+		left: 0
+		top: 0
+		display: block
+		margin: 0
+		cursor: pointer
+		&:checked + label
+			color: #ffffff
+			background: $color-blue
+a
+	color: $color-blue
+	letter-spacing: .1em
+.manage-people
+	.row>div
+		.btn-edit
+			right: 15px
+			width: 40px
+			height: 40px
+	.person-item
+		background: #fff
+		line-height: 1.4em
+		font-size: .9em
+		letter-spacing: 0
+		padding: 10px
+		margin: 0 0 1px 0
+		color: $color-gray-dark
+		text-align: left
+		span
+			display: inline-block
+			vertical-align: middle
+			letter-spacing: .05em
+			margin-bottom: 6px
+		.person-name
+			font-size: 1.2em
+			font-weight: 700
+.person-permission
+	background: $color-blue
+	color: #fff
+	font-size: .8em
+	padding: 2px 10px
+	border-radius: 2px
+	&.active
+		background: $color-red
+.manage-items
+	.row
+		width: 100%
+	.orders
+		+user-select(none)
+		padding: 0 10px 0 0
+		.order
+			padding: 0 0 0 20px
+			background: #fff
+			border-radius: 4px
+			position: relative
+			margin-bottom: 15px
+			text-align: left
+			+box-shadow(1px 1px 6px #dddddd)
+			// overflow: hidden
+			&::before
+				content: ""
+				display: block
+				left: 0
+				top: 0
+				width: 20px
+				height: 100%
+				border-radius: 4px 0 0 4px
+				position: absolute
+				background: url(../images/drag.svg) $color-blue2 center center/18px auto no-repeat!important
+			.btn-edit
+				height: 40px
+				position: absolute
+				right: 0
+				top: 0
+				width: 40px
+				line-height: 40px
+				margin: 0
+			table
+				position: relative
+				z-index: 1
+				line-height: 30px
+			th
+				border-color: #6ac8ce
+			td
+				border-color: #f1f1f1
+				padding-left: 10px
+				padding-right: 10px
+				line-height: 30px
+			th
+				background: $color-blue2
+				color: #ffffff
+				width: 70px
+				white-space: nowrap
+.title-time
+	position: absolute
+	overflow: hidden
+	top: 50px
+	left: 0
+	// margin-left: -120px
+	// +transform(translateX(-50%))
+	max-width: 120px
+	z-index: 100
+	input.form-control
+		position: relative
+		line-height: 30px
+		background: transparent
+		padding: 0 0 0 26px
+		font-size: .9em
+		color: white
+		border: 0
+	&::before
+		content: ""
+		display: block
+		position: absolute
+		left: 0
+		top: 0
+		width: 24px
+		height: 28px
+		// border: 1px solid #40c5ce
+		// border-radius: 4px
+		background: url(../images/calendar.svg) center center/18px auto no-repeat!important
+
+.list-today
+	.content
+		border: 1px solid $color-gray-light
+		border-radius: 6px
+		overflow: hidden
+		background: #ffffff
+		th
+			text-align: left
+			white-space: nowrap
+			&:nth-of-type(4)
+				width: 250px
+		td
+			text-align: left
+.list-all, .list-store
+	h4
+		background: transparent
+		position: relative
+		line-height: 40px
+		border-radius: 0
+		white-space: nowrap
+		padding: 0 30px 0 10px
+		max-width: 130px
+	.row
+		width: 100%
+	.lists
+		padding: 0
+	.list
+		width: 100%
+		margin-bottom: 20px
+		+box-shadow(1px 1px 6px #dddddd)
+		th
+			color: white
+			white-space: nowrap
+			background: $color-blue2
+			min-width: 60px
+			padding-left: 10px
+			padding-right: 10px
+		.table-responsive-sm
+			th:nth-of-type(1), td:nth-of-type(1)
+				padding: 0
+				line-height: 40px
+				width: 130px
+			th
+				line-height: 40px
+				padding: 0 10px
+			td
+				line-height: 40px
+		td
+			background: white
+			color: $color-blue
+			line-height: 30px
+			padding: 0 10px
+			&:nth-of-type(1)
+				background: $color-blue3
+				padding: 0
+				line-height: 1.2em
+	.list2
+		.table-responsive-sm
+			th:nth-of-type(1), td:nth-of-type(1)
+				line-height: 30px
+			th, td
+				line-height: 30px
+	.btn-detail
+		position: absolute
+		right: 0
+		top: 0
+		width: 40px
+		height: 40px
+		margin: 0
+.list-store
+	h4
+		background: $color-blue-light
+		padding: 6px 10px
+		min-height: 30px
+		white-space: nowrap
+		line-height: 1.2em
+		span
+			display: inline-block
+			vertical-align: top
+			width: 18px
+			height: 30px
+			background: url(../images/mark1_1.png) center center/16px auto no-repeat
+			&.mark0_0
+				background-image: url(../images/mark0_0.png)
+			&.mark0_1
+				background-image: url(../images/mark0_1.png)
+			&.mark0_2
+				background-image: url(../images/mark0_2.png)
+			&.mark0_3
+				background-image: url(../images/mark0_3.png)
+			&.mark1_0
+				background-image: url(../images/mark1_0.png)
+			&.mark1_1
+				background-image: url(../images/mark1_1.png)
+			&.mark1_2
+				background-image: url(../images/mark1_2.png)
+			&.mark1_3
+				background-image: url(../images/mark1_3.png)
+			&.mark2_0
+				background-image: url(../images/mark2_0.png)
+			&.mark2_1
+				background-image: url(../images/mark2_1.png)
+			&.mark2_2
+				background-image: url(../images/mark2_2.png)
+			&.mark2_3
+				background-image: url(../images/mark2_3.png)
+			&.mark3_0
+				background-image: url(../images/mark3_0.png)
+			&.mark3_1
+				background-image: url(../images/mark3_1.png)
+			&.mark3_2
+				background-image: url(../images/mark3_2.png)
+			&.mark3_3
+				background-image: url(../images/mark3_3.png)
+	.sum
+		h4
+			background: $color-blue
+		td
+			background: $color-gray-light
+.empty
+	background: white
+	text-align: center
+	width: 100%
+.return-log
+	td
+		text-align: left
+
+form .block
+	border-radius: 4px
+	padding: 10px 10px 5px 10px
+	background: rgba(255,255,255,.3)
+	margin-bottom: 5px
+.form-group1
+	position: relative
+	padding-left: 50px
+	padding-right: 50px
+	label
+		position: absolute
+		left: 0
+		top: 0
+	span
+		position: absolute
+		right: 0
+		top: 0
+.form-group2
+	position: relative
+	padding-left: 50px
+	label
+		position: absolute
+		left: 0
+		top: 0
+.form-group3
+	position: relative
+	padding-left: 70px
+	padding-right: 30px
+	label
+		position: absolute
+		left: 0
+		top: 0
+	span
+		position: absolute
+		right: 0
+		top: 0
+		line-height: 40px
+.form-group4
+	position: relative
+	padding-left: 70px
+	label
+		position: absolute
+		left: 0
+		top: 0
+.form-group5
+	position: relative
+	padding-left: 90px
+	label
+		position: absolute
+		left: 0
+		top: 0
+
+#cal
+	width: 100%
+	position: fixed
+	margin: 0
+	left: 0!important
+	top: 0!important
+	padding: 60px 20px 0 20px
+	background: rgba(255,255,255,.8)
+	height: 100%
+	z-index: 1000!important
+	+box-shadow(none)
+	.header
+		background: $color-blue2
+		.left.button, .right.button
+			border-color: $color-blue
+			&:hover
+				background: $color-blue-light
+		.month-year
+			font-size: 1.2em
+			text-shadow: none
+	table
+		width: 100%
+	>div, >table
+		max-width: 400px
+		margin: 0 auto
+
+#content-person-category
+	.row
+		text-align: left
+	.form-check
+		padding: 5px
+		text-align: center
+
+
+.fade-enter-active
+	+transition(opacity .4s ease-out)
+.fade-leave-active
+	+transition(opacity .3s ease-in)
+.fade-enter, .fade-leave-to
+	opacity: 0
+
+
+.ghost
+	opacity: 0.5
+	background: #c8ebfb

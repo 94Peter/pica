@@ -51,7 +51,8 @@
 
     <div id="app" class="screen">
         <div class="pages">
-            <button class="btn btn-back btn-icon" v-on:click="goBack()" v-if="['first', 'all', 'store', 'report', 'setting', 'log'].indexOf($route.name) > -1"></button>
+            <button class="btn btn-back btn-icon" v-on:click="goHome()" v-if="['first', 'all', 'report', 'setting', 'log'].indexOf($route.name) > -1"></button>
+            <button class="btn btn-back btn-icon" v-on:click="goBack()" v-if="['store'].indexOf($route.name) > -1"></button>
             <button class="btn btn-menu btn-icon" v-on:click="openLightbox('menu2')" v-if="['today', 'all', 'store', 'report', 'setting', 'log'].indexOf($route.name) > -1"></button>
             <!-- <transition name="fade" mode="out-in" :duration="{ enter: 300, leave: 200 }"> -->
                 <router-view 

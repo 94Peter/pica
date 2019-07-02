@@ -289,7 +289,7 @@ const Store = {
         <div class="d-flex justify-content-center">
         <div class="row">
             <div class="col-12 lists">
-                <div class="list">
+                <div class="list list2">
                     <table class="table table-sm table-responsive-sm" v-if="datastore.data">
                     <tbody>
                         <tr v-if="datastore.columns">
@@ -646,6 +646,7 @@ let vm = new Vue({
                                                     vm.hintGreen('登入成功');
                                                     switch(json.state){
                                                         case 'reset':
+                                                            vm.openLightbox('setting-stock');
                                                         case 'normal':
                                                             router.push({ name: "today"});
                                                             break;
@@ -1004,6 +1005,9 @@ let vm = new Vue({
             window.history.length > 1
                 ? this.$router.go(-1)
                 : this.$router.push('/')
+        },
+        goHome (){
+            router.push({ name: "today"});
         },
         openLightbox(n) {
             this.isOpenLightbox = true;
